@@ -4,7 +4,7 @@ window.addEventListener("load",()=>{
     const body = document.querySelector("body")
     const tools = document.querySelector("#tools")
     const penWidthRange = document.querySelector("#pen-width-range")
-    const test = document.querySelector("#test")
+    const penWidthDisplay = document.querySelector("#pen-width-display")
     ctx = canvas.getContext("2d")
 
         canvas.height = document.body.clientHeight - tools.offsetHeight ;
@@ -30,7 +30,7 @@ window.addEventListener("load",()=>{
 
     function draw(e){
         if(!painting) return;
-        ctx.lineWidth = 5;
+        ctx.lineWidth = penWidthRange.value;
         ctx.lineCap = "round";
         ctx.strokeStyle = "red";
 
@@ -44,7 +44,9 @@ window.addEventListener("load",()=>{
     canvas.addEventListener("mousemove", draw)
 
     function displayPenWidth(){
-        test.innerHTML = "Pen Width: " + penWidthRange.value
+        penWidthDisplay.innerHTML = "Pen Width: " + penWidthRange.value
+        const widthExample = document.querySelector("#width-example")
+        gsap.to(widthExample, { width:penWidthRange.value})
     }
 
     penWidthRange.addEventListener("change", displayPenWidth)
