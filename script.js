@@ -3,6 +3,8 @@ window.addEventListener("load",()=>{
     const canvas = document.querySelector("#canvas")
     const body = document.querySelector("body")
     const tools = document.querySelector("#tools")
+    const penWidthRange = document.querySelector("#pen-width-range")
+    const test = document.querySelector("#test")
     ctx = canvas.getContext("2d")
 
         canvas.height = document.body.clientHeight - tools.offsetHeight ;
@@ -40,6 +42,12 @@ window.addEventListener("load",()=>{
     canvas.addEventListener("mousedown", startPosition)
     canvas.addEventListener("mouseup", finishedPosition)
     canvas.addEventListener("mousemove", draw)
+
+    function displayPenWidth(){
+        test.innerHTML = "Pen Width: " + penWidthRange.value
+    }
+
+    penWidthRange.addEventListener("change", displayPenWidth)
     
    
 })
