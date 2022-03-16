@@ -5,6 +5,7 @@ window.addEventListener("load",()=>{
     const interface = document.querySelector("#interface")
     const penWidthRange = document.querySelector("#pen-width-range")
     const penWidthDisplay = document.querySelector("#pen-width-display")
+    const widthExample = document.querySelector("#width-example")
     const toolColour = document.querySelector("#tool-colour")
     const tools = document.querySelector("#tools")
     let pen = true;
@@ -12,6 +13,7 @@ window.addEventListener("load",()=>{
     let square = false
     let circle = false
 
+//CONSIDER REMOVING EVENTLISTENERS WHEN NOT SELECTED BY TOOLS AND THEN ADDING THEM BACK WHEN IN USE FOR PERFORMANCE'S SAKE???
 
     ctx = canvas.getContext("2d")
 
@@ -31,11 +33,13 @@ window.addEventListener("load",()=>{
             line = false
             square = false
             circle = false
+            e.target.style.color = 'red'
         } else if (selectedTool == "Line"){
             pen = false
             line = true
             square = false
             circle = false
+            e.target.style.color = 'blue'
         } else if (selectedTool == "Square"){
             pen = false
             line = false
@@ -49,9 +53,6 @@ window.addEventListener("load",()=>{
         }
     }
 
-
-
-    console.log(tools.children)
     for( let i = 0; i < tools.children.length; i++){
         tools.children[i].addEventListener("click", checkTool)
     }
@@ -62,18 +63,20 @@ window.addEventListener("load",()=>{
 
     let painting = false;
 
-    function startPosition (e){
+    function startPenPosition (e){
         if (!pen) return;
         painting = true;
-        draw(e);
+        penDraw(e);
     }
 
-    function finishedPosition(){
+    function finishedPenPosition(){
+        if (!pen) return;
         painting = false;
         ctx.beginPath();
     }
 
-    function draw(e){
+    function penDraw(e){
+        if (!pen) return;
         if(!painting) return;
         ctx.lineWidth = penWidthRange.value;
         ctx.lineCap = "round";
@@ -84,30 +87,53 @@ window.addEventListener("load",()=>{
         // ctx.beginPath()
         ctx.moveTo(e.clientX, e.clixentY - interface.offsetHeight)
     }
-    canvas.addEventListener("mousedown", startPosition)
-    canvas.addEventListener("mouseup", finishedPosition)
-    canvas.addEventListener("mousemove", draw)
+    canvas.addEventListener("mousedown", startPenPosition)
+    canvas.addEventListener("mouseup", finishedPenPosition)
+    canvas.addEventListener("mousemove", penDraw)
 
 
 
 //                                                          PEN WIDTH       !!!!!!!!!!!!!!
     function displayPenWidth(){
         penWidthDisplay.innerHTML = "Pen Width: " + penWidthRange.value
-        const widthExample = document.querySelector("#width-example")
-        gsap.to(widthExample, { width:penWidthRange.value})
+        gsap.to(widthExample, { width:penWidthRange.value, backgroundColor: toolColour.value})
     }
 
     penWidthRange.addEventListener("change", displayPenWidth)
+    toolColour.addEventListener("change", displayPenWidth)
+
     
 //                                                          LINE             !!!!!!!!!!!!!!
 
+let drawLine = false;
+    function startLinePosition(e){
+        if(!line)return
+        drawLine = true
+        
+        ctx.lineWidth = penWidthRange.value;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = toolColour.value;
+        ctx.beginPath();
+        ctx.moveTo(e.clientX, e.clixentY - interface.offsetHeight)
+        
+        console.log("line start ")
+    }
+    function finishedLinePosition(e){
+        if (!line) return;
+        drawLine = false
+       
+        console.log("line finish")
+        ctx.lineTo(e.clientX , e.clientY - interface.offsetHeight);
+        ctx.stroke();
+        
+    }
+
+    
 
 
-
-
-
-
-
+    canvas.addEventListener("mousedown", startLinePosition)
+    canvas.addEventListener("mouseup", finishedLinePosition)
+    
 
 
 

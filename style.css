@@ -31,8 +31,7 @@ body{
 #width-example{
     border-width: none;
     width: 1px;
-    color: red;
-    background-color: red;
+    background-color: #0000ff;
 }
 
 #canvas{
