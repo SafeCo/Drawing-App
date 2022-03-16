@@ -5,6 +5,7 @@ window.addEventListener("load",()=>{
     const tools = document.querySelector("#tools")
     const penWidthRange = document.querySelector("#pen-width-range")
     const penWidthDisplay = document.querySelector("#pen-width-display")
+    const penColor = document.querySelector("#pen-color")
     ctx = canvas.getContext("2d")
 
         canvas.height = document.body.clientHeight - tools.offsetHeight ;
@@ -32,7 +33,7 @@ window.addEventListener("load",()=>{
         if(!painting) return;
         ctx.lineWidth = penWidthRange.value;
         ctx.lineCap = "round";
-        ctx.strokeStyle = "red";
+        ctx.strokeStyle = penColor.value;
 
         ctx.lineTo(e.clientX , e.clientY - tools.offsetHeight);
         ctx.stroke();
