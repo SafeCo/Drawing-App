@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div id="tools">
+        <div id="interface">
             <div>
                 <p id="pen-width-display">Pen Width: 1</p>
                 <div class="slidecontainer">
@@ -21,11 +21,17 @@
                 </div>
             </div>
             <div >
-                <p>Pen Colour:</p>
-                <input type="color" id="pen-color" value="#0000ff">
+                <p>Colour:</p>
+                <input type="color" id="tool-colour" value="#0000ff">
             </div>
             <div>
                 <p>Shapes:</p>
+                <ul id="tools">
+                    <li>Pen</li>
+                    <li>Line</li>
+                    <li>Square</li>
+                    <li>Circle</li>
+                </ul>
             </div>
             <div>
                 <p>Line:</p>

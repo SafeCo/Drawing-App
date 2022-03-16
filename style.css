@@ -10,7 +10,7 @@ body{
     
 }
 
-#tools{
+#interface{
    height: 100px;
     border: solid black 1px;
     background-color: grey;
@@ -48,4 +48,12 @@ body{
 
 .test{
     border-top: solid black 1px;
+}
+ul{
+    list-style: none;
+}
+
+li{
+    border: solid black 1px;
+    cursor: pointer;
 }
