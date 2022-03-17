@@ -106,33 +106,59 @@ window.addEventListener("load",()=>{
 //                                                          LINE             !!!!!!!!!!!!!!
 
 let drawLine = false;
-    function startLinePosition(e){
-        if(!line)return
-        drawLine = true
-        
+let lineStartPosition = {x : 0, y: 0};
+let lineEndPostion = {x:0 , y: 0}
+
+const getLinePosition = (event) => {
+    const {pageX, pageY} = event.touches ? event.touches[0] : event;
+    const x = pageX - canvasEle.offsetLeft;
+    const y = pageY - canvasEle.offsetTop;
+
+    return {
+       x,
+       y
+    } 
+}
+
+const drawLine = () => {
+    ctx.beginPath();
+    ctx.moveTo(lineStartPosition.x, lineStartPosition.y);
+    ctx.lineTo(lineEndPostion.x, lineEndPostion.y);
+    ctx.stroke();
+ }
+
+
+// function startLinePosition(e){
+//     if(!line)return
+//     drawLine = true
+    
+    
+    
+//     console.log("line start ")
+// }
+// function finishedLinePosition(e){
+//     if (!line) return;
+//     drawLine = false
+   
+    
+// }
+    
+
+    function lineDraw(){
         ctx.lineWidth = penWidthRange.value;
         ctx.lineCap = "round";
         ctx.strokeStyle = toolColour.value;
         ctx.beginPath();
         ctx.moveTo(e.clientX, e.clixentY - interface.offsetHeight)
-        
-        console.log("line start ")
-    }
-    function finishedLinePosition(e){
-        if (!line) return;
-        drawLine = false
-       
-        console.log("line finish")
         ctx.lineTo(e.clientX , e.clientY - interface.offsetHeight);
         ctx.stroke();
-        
     }
 
     
 
 
-    canvas.addEventListener("mousedown", startLinePosition)
-    canvas.addEventListener("mouseup", finishedLinePosition)
+    canvas.addEventListener("mousedown", findLinePosition)
+    canvas.addEventListener("mouseup", findLinePosition)
     
 
 
