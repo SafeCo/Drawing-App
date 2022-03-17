@@ -145,6 +145,9 @@ const drawLine = () => {
   }
 
   const clearCanvas = () => {
+    ctx.lineWidth = penWidthRange.value;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = toolColour.value;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
  }
  canvas.addEventListener('mousedown', mouseDownListener);
