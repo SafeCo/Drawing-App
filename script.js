@@ -110,6 +110,7 @@ let lineStartPosition = {x : 0, y: 0};
 let lineEndPostion = {x:0 , y: 0}
 
 const getLinePosition = (event) => {
+    if (!line) return;
     const {pageX, pageY} = event.touches ? event.touches[0] : event;
     const x = pageX - canvas.offsetLeft;
     const y = pageY - canvas.offsetTop;
@@ -121,75 +122,46 @@ const getLinePosition = (event) => {
 }
 
 const drawLine = () => {
+    
     ctx.beginPath();
     ctx.moveTo(lineStartPosition.x, lineStartPosition.y);
     ctx.lineTo(lineEndPostion.x, lineEndPostion.y);
     ctx.stroke();
  }
 
- const mouseDownListener = (event) => {
+ const lineMouseDownListener = (event) => {
+    if (!line) return;
     lineStartPosition = getLinePosition(event);
     isDrawLine = true;
  }
 
- const mouseMoveListener = (event) => {
+ const lineMouseMoveListener = (event) => {
     if(!isDrawLine) return;
-    
+    if (!line) return;
     lineEndPostion = getLinePosition(event);
     clearCanvas();
     drawLine();
   }
 
-  const mouseupListener = (event) => {
+  const lineMouseupListener = (event) => {
+    if (!line) return;
     isDrawLine = false;
   }
 
   const clearCanvas = () => {
+    if (!line) return;
     ctx.lineWidth = penWidthRange.value;
     ctx.lineCap = "round";
     ctx.strokeStyle = toolColour.value;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
  }
- canvas.addEventListener('mousedown', mouseDownListener);
- canvas.addEventListener('mousemove', mouseMoveListener);
- canvas.addEventListener('mouseup', mouseupListener);
-
-
-// function startLinePosition(e){
-//     if(!line)return
-//     drawLine = true
-    
-    
-    
-//     console.log("line start ")
-// }
-// function finishedLinePosition(e){
-//     if (!line) return;
-//     drawLine = false
-   
-    
-// }
-    
-
-    // function lineDraw(){
-    //     ctx.lineWidth = penWidthRange.value;
-    //     ctx.lineCap = "round";
-    //     ctx.strokeStyle = toolColour.value;
-    //     ctx.beginPath();
-    //     ctx.moveTo(e.clientX, e.clixentY - interface.offsetHeight)
-    //     ctx.lineTo(e.clientX , e.clientY - interface.offsetHeight);
-    //     ctx.stroke();
-    // }
-
-    
-
-
-    // canvas.addEventListener("mousedown", findLinePosition)
-    // canvas.addEventListener("mouseup", findLinePosition)
-    
+ canvas.addEventListener('mousedown', lineMouseDownListener);
+ canvas.addEventListener('mousemove', lineMouseMoveListener);
+ canvas.addEventListener('mouseup', lineMouseupListener);
 
 
 
+//                                                          SQUARE            !!!!!!!!!!!!!!
 
 
    
