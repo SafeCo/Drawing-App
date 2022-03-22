@@ -128,7 +128,7 @@ const getLinePosition = (event) => {
     
 }
 
-const drawLine = (eve) => {
+const drawLine = (event) => {
     if(pen ==true) return;
     if (!line || !square || !circle) { 
         ctx.lineWidth = penWidthRange.value;
@@ -140,14 +140,20 @@ const drawLine = (eve) => {
             ctx.lineTo(lineEndPostion.x, lineEndPostion.y);
             ctx.stroke();
         } else if (square == true){
-            console.log(lineStartPosition.x)
-            console.log(lineStartPosition.y)
-            console.log(lineEndPostion.x)
-            console.log(lineEndPostion.y)
+            console.log("line Start X:" + lineStartPosition.x)
+            console.log("line Start Y:" + lineStartPosition.y)
 
+            console.log("mouse X:" + event.clientX)
+            console.log("mouse Y:" + event.clientY)
+
+            let rectWidth = Math.abs(lineStartPosition.x - event.clientX)
+            let rectHeight = Math.abs(lineStartPosition.y - event.clientY)
+
+            console.log("rect height:" + rectHeight)
+            console.log("rect width:" + rectWidth)
 
             ctx.beginPath();
-            ctx.rect(lineStartPosition.x, lineStartPosition.y,lineEndPostion.y, lineEndPostion.y);
+            ctx.rect(lineStartPosition.x, lineStartPosition.y, rectHeight, rectWidth);
             ctx.stroke();
         }
     }
@@ -170,7 +176,7 @@ const drawLine = (eve) => {
     if (!line || !square) {
         lineEndPostion = getLinePosition(event);
         clearCanvas();
-        drawLine();
+        drawLine(event);
     }
     
   }
