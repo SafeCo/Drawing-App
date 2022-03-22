@@ -14,7 +14,7 @@ window.addEventListener("load",()=>{
     let circle = false
 
 //CONSIDER REMOVING EVENTLISTENERS WHEN NOT SELECTED BY TOOLS AND THEN ADDING THEM BACK WHEN IN USE FOR PERFORMANCE'S SAKE???
-
+// EVERYTIME THE CANVAS RENDERS THE LINE IT SUBSEQUNTLY REFRESHES THE CANVAS REMOVING OTHER DRAWINGS, CONSIDER PUTTING DRAWINGS INTO AN OBJECT AND RENDERING THEM EVERYTIME THE CANVAS IS RENDERED.
     ctx = canvas.getContext("2d")
 
         canvas.height = document.body.clientHeight - interface.offsetHeight ;
@@ -45,11 +45,14 @@ window.addEventListener("load",()=>{
             line = false
             square = true
             circle = false
+            console.log(square)
+            e.target.style.color = 'yellow'
         } else if (selectedTool == "Circle"){
             pen = false
             line = false
             square = false
             circle = true
+            e.target.style.color = 'green'
         }
     }
 
@@ -85,7 +88,7 @@ window.addEventListener("load",()=>{
         ctx.lineTo(e.clientX , e.clientY - interface.offsetHeight);
         ctx.stroke();
         // ctx.beginPath()
-        ctx.moveTo(e.clientX, e.clixentY - interface.offsetHeight)
+        // ctx.moveTo(e.clientX, e.clixentY - interface.offsetHeight)
     }
     canvas.addEventListener("mousedown", startPenPosition)
     canvas.addEventListener("mouseup", finishedPenPosition)
@@ -110,58 +113,91 @@ let lineStartPosition = {x : 0, y: 0};
 let lineEndPostion = {x:0 , y: 0}
 
 const getLinePosition = (event) => {
-    if (!line) return;
-    const {pageX, pageY} = event.touches ? event.touches[0] : event;
-    const x = pageX - canvas.offsetLeft;
-    const y = pageY - canvas.offsetTop;
-
-    return {
-       x,
-       y
-    } 
+    if(pen ==true) return;
+    if (!line || !square || !circle) {
+        const {pageX, pageY} = event.touches ? event.touches[0] : event;
+        const x = pageX - canvas.offsetLeft;
+        const y = pageY - canvas.offsetTop;
+        
+        return {
+        x,
+        y
+        } 
+        console.log("getline")
+    }
+    
 }
 
-const drawLine = () => {
+const drawLine = (eve) => {
+    if(pen ==true) return;
+    if (!line || !square || !circle) { 
+        ctx.lineWidth = penWidthRange.value;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = toolColour.value;
+        if (line == true){
+            ctx.beginPath();
+            ctx.moveTo(lineStartPosition.x, lineStartPosition.y);
+            ctx.lineTo(lineEndPostion.x, lineEndPostion.y);
+            ctx.stroke();
+        } else if (square == true){
+            console.log(lineStartPosition.x)
+            console.log(lineStartPosition.y)
+            console.log(lineEndPostion.x)
+            console.log(lineEndPostion.y)
+
+
+            ctx.beginPath();
+            ctx.rect(lineStartPosition.x, lineStartPosition.y,lineEndPostion.y, lineEndPostion.y);
+            ctx.stroke();
+        }
+    }
     
-    ctx.beginPath();
-    ctx.moveTo(lineStartPosition.x, lineStartPosition.y);
-    ctx.lineTo(lineEndPostion.x, lineEndPostion.y);
-    ctx.stroke();
  }
 
  const lineMouseDownListener = (event) => {
-    if (!line) return;
-    lineStartPosition = getLinePosition(event);
-    isDrawLine = true;
+    if(pen ==true) return;
+    if (!line || !square || !circle) { 
+        lineStartPosition = getLinePosition(event);
+        isDrawLine = true;
+
+    };
+  
  }
 
  const lineMouseMoveListener = (event) => {
     if(!isDrawLine) return;
-    if (!line) return;
-    lineEndPostion = getLinePosition(event);
-    clearCanvas();
-    drawLine();
+    if(pen ==true) return;
+    if (!line || !square) {
+        lineEndPostion = getLinePosition(event);
+        clearCanvas();
+        drawLine();
+    }
+    
   }
 
   const lineMouseupListener = (event) => {
-    if (!line) return;
-    isDrawLine = false;
+    if(pen ==true) return;
+    if (!line || !square || !circle) {
+        isDrawLine = false;
+    }
   }
 
   const clearCanvas = () => {
-    if (!line) return;
-    ctx.lineWidth = penWidthRange.value;
-    ctx.lineCap = "round";
-    ctx.strokeStyle = toolColour.value;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if(pen ==true) return;
+    if (!line || !square || !circle) {
+        ctx.lineWidth = penWidthRange.value;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = toolColour.value;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    }
+
  }
  canvas.addEventListener('mousedown', lineMouseDownListener);
  canvas.addEventListener('mousemove', lineMouseMoveListener);
  canvas.addEventListener('mouseup', lineMouseupListener);
 
 
-
-//                                                          SQUARE            !!!!!!!!!!!!!!
 
 
    
