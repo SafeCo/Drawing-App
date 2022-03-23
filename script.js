@@ -140,21 +140,34 @@ const drawLine = (event) => {
             ctx.lineTo(lineEndPostion.x, lineEndPostion.y);
             ctx.stroke();
         } else if (square == true){
-            console.log("line Start X:" + lineStartPosition.x)
-            console.log("line Start Y:" + lineStartPosition.y)
-
-            console.log("mouse X:" + event.clientX)
-            console.log("mouse Y:" + event.clientY)
-
-            let rectWidth = Math.abs(lineStartPosition.x - event.clientX)
-            let rectHeight = Math.abs(lineStartPosition.y - event.clientY)
-
-            console.log("rect height:" + rectHeight)
-            console.log("rect width:" + rectWidth)
-
+                    
+            //TOP SQUARE
             ctx.beginPath();
-            ctx.rect(lineStartPosition.x, lineStartPosition.y, rectHeight, rectWidth);
+            ctx.moveTo(lineStartPosition.x, lineStartPosition.y);
+            ctx.lineTo(lineEndPostion.x, lineStartPosition.y);
             ctx.stroke();
+            ctx.beginPath();
+
+            //LEFT SQUARE
+            ctx.beginPath();
+            ctx.moveTo(lineStartPosition.x, lineStartPosition.y);
+            ctx.lineTo(lineStartPosition.x, lineEndPostion.y);
+            ctx.stroke();
+            ctx.beginPath();
+            
+            //RIGHT SQUARE
+            ctx.beginPath();
+            ctx.moveTo(lineEndPostion.x, lineStartPosition.y);
+            ctx.lineTo(lineEndPostion.x, lineEndPostion.y);
+            ctx.stroke();
+            ctx.beginPath();
+
+            //BOTTOM SQUARE
+            ctx.beginPath();
+            ctx.moveTo(lineStartPosition.x, lineEndPostion.y);
+            ctx.lineTo(lineEndPostion.x, lineEndPostion.y);
+            ctx.stroke();
+            
         }
     }
     
