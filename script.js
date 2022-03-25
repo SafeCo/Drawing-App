@@ -168,6 +168,10 @@ const drawLine = (event) => {
             ctx.lineTo(lineEndPostion.x, lineEndPostion.y);
             ctx.stroke();
             
+        }else if ( circle == true){
+            ctx.beginPath();
+            ctx.arc(lineStartPosition.x, lineStartPosition.y, lineStartPosition.y - lineEndPostion.y, 0, 2 * Math.PI);
+            ctx.stroke();
         }
     }
     
