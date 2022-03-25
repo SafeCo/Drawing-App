@@ -249,8 +249,6 @@ const drawShape = (event) => {
  }
 
  undoButton.addEventListener('click', undoLast)
-
-
    
 })
 
