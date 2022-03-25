@@ -17,16 +17,20 @@ window.addEventListener("load",()=>{
     let restore_array = [];
     let index = -1;
 
-//CONSIDER REMOVING EVENTLISTENERS WHEN NOT SELECTED BY TOOLS AND THEN ADDING THEM BACK WHEN IN USE FOR PERFORMANCE'S SAKE???
-// EVERYTIME THE CANVAS RENDERS THE LINE IT SUBSEQUNTLY REFRESHES THE CANVAS REMOVING OTHER DRAWINGS, CONSIDER PUTTING DRAWINGS INTO AN OBJECT AND RENDERING THEM EVERYTIME THE CANVAS IS RENDERED.
     ctx = canvas.getContext("2d")
 
         canvas.height = document.body.clientHeight - interface.offsetHeight ;
         canvas.width = document.body.clientWidth;
+
+//                                                          RESIZE   !!!!!!!!!!!!!!
+
     
     window.addEventListener("resize", function(){
         canvas.height = document.body.clientHeight - interface.offsetHeight;
         canvas.width = document.body.clientWidth;
+        for( i = 0; i < restore_array.length; i++){
+            ctx.putImageData(restore_array[i],0,0);
+        }
        
     })
 //                                                          TOOL BUTTONS      !!!!!!!!!!!!!!
@@ -74,11 +78,15 @@ window.addEventListener("load",()=>{
         if (!pen) return;
         painting = true;
         penDraw(e);
+        
     }
 
     function finishedPenPosition(){
         if (!pen) return;
         painting = false;
+        restore_array.push(ctx.getImageData(0,0, canvas.width, canvas.height ));
+        index += 1;
+        
         ctx.beginPath();
     }
 
@@ -112,11 +120,11 @@ window.addEventListener("load",()=>{
     
 //                                                         SHAPE              !!!!!!!!!!!!!!
 
-let isDrawLine = false;
-let lineStartPosition = {x : 0, y: 0};
-let lineEndPostion = {x:0 , y: 0}
+let isDrawShape = false;
+let shapeStartPosition = {x : 0, y: 0};
+let shapeEndPosition = {x:0 , y: 0}
 
-const getLinePosition = (event) => {
+const getShapePosition = (event) => {
     if(pen ==true) return;
     if (!line || !square || !circle) {
         const {pageX, pageY} = event.touches ? event.touches[0] : event;
@@ -127,12 +135,12 @@ const getLinePosition = (event) => {
         x,
         y
         } 
-        console.log("getline")
+    
     }
     
 }
 
-const drawLine = (event) => {
+const drawShape = (event) => {
     if(pen ==true) return;
     if (!line || !square || !circle) { 
         ctx.lineWidth = penWidthRange.value;
@@ -140,75 +148,77 @@ const drawLine = (event) => {
         ctx.strokeStyle = toolColour.value;
         if (line == true){
             ctx.beginPath();
-            ctx.moveTo(lineStartPosition.x, lineStartPosition.y);
-            ctx.lineTo(lineEndPostion.x, lineEndPostion.y);
+            ctx.moveTo(shapeStartPosition.x, shapeStartPosition.y);
+            ctx.lineTo(shapeEndPosition.x, shapeEndPosition.y);
             ctx.stroke();
+            ctx.beginPath();
         } else if (square == true){
-                    
+            ctx.lineCap = "square";
             //TOP SQUARE
             ctx.beginPath();
-            ctx.moveTo(lineStartPosition.x, lineStartPosition.y);
-            ctx.lineTo(lineEndPostion.x, lineStartPosition.y);
+            ctx.moveTo(shapeStartPosition.x, shapeStartPosition.y);
+            ctx.lineTo(shapeEndPosition.x, shapeStartPosition.y);
             ctx.stroke();
             ctx.beginPath();
 
             //LEFT SQUARE
             ctx.beginPath();
-            ctx.moveTo(lineStartPosition.x, lineStartPosition.y);
-            ctx.lineTo(lineStartPosition.x, lineEndPostion.y);
+            ctx.moveTo(shapeStartPosition.x, shapeStartPosition.y);
+            ctx.lineTo(shapeStartPosition.x, shapeEndPosition.y);
             ctx.stroke();
             ctx.beginPath();
             
             //RIGHT SQUARE
             ctx.beginPath();
-            ctx.moveTo(lineEndPostion.x, lineStartPosition.y);
-            ctx.lineTo(lineEndPostion.x, lineEndPostion.y);
+            ctx.moveTo(shapeEndPosition.x, shapeStartPosition.y);
+            ctx.lineTo(shapeEndPosition.x, shapeEndPosition.y);
             ctx.stroke();
             ctx.beginPath();
 
             //BOTTOM SQUARE
             ctx.beginPath();
-            ctx.moveTo(lineStartPosition.x, lineEndPostion.y);
-            ctx.lineTo(lineEndPostion.x, lineEndPostion.y);
+            ctx.moveTo(shapeStartPosition.x, shapeEndPosition.y);
+            ctx.lineTo(shapeEndPosition.x, shapeEndPosition.y);
             ctx.stroke();
+            ctx.beginPath();
             
         }else if ( circle == true){
             ctx.beginPath();
-            ctx.arc(lineStartPosition.x, lineStartPosition.y, lineStartPosition.y - lineEndPostion.y, 0, 2 * Math.PI);
+            ctx.arc(shapeStartPosition.x, shapeStartPosition.y, shapeStartPosition.y - shapeEndPosition.y, 0, 2 * Math.PI);
             ctx.stroke();
+            ctx.beginPath();
         }
     }
     
  }
 
- const lineMouseDownListener = (event) => {
+ const shapeMouseDownListener = (event) => {
     if(pen ==true) return;
     if (!line || !square || !circle) { 
-        lineStartPosition = getLinePosition(event);
-        isDrawLine = true;
+        shapeStartPosition = getShapePosition(event);
+        isDrawShape = true;
 
     };
   
  }
 
- const lineMouseMoveListener = (event) => {
-    if(!isDrawLine) return;
+ const shapeMouseMoveListener = (event) => {
+    if(!isDrawShape) return;
     if(pen ==true) return;
     if (!line || !square) {
-        lineEndPostion = getLinePosition(event);
+        shapeEndPosition = getShapePosition(event);
         clearCanvas(event);
-        drawLine(event);
+        drawShape(event);
     }
     
   }
 
-  const lineMouseupListener = (event) => {
+  const shapeMouseupListener = (event) => {
     if(pen ==true) return;
     if (!line || !square || !circle) {
-        isDrawLine = false;
-    
-            restore_array.push(ctx.getImageData(0,0, canvas.width, canvas.height ));
-            index += 1;
+        isDrawShape = false;
+        restore_array.push(ctx.getImageData(0,0, canvas.width, canvas.height ));
+        index += 1;
             
 
     }
@@ -227,9 +237,9 @@ const drawLine = (event) => {
     }
 
  }
- canvas.addEventListener('mousedown', lineMouseDownListener);
- canvas.addEventListener('mousemove', lineMouseMoveListener);
- canvas.addEventListener('mouseup', lineMouseupListener);
+ canvas.addEventListener('mousedown', shapeMouseDownListener);
+ canvas.addEventListener('mousemove', shapeMouseMoveListener);
+ canvas.addEventListener('mouseup', shapeMouseupListener);
 
 
  function undoLast (){
@@ -238,6 +248,7 @@ const drawLine = (event) => {
      ctx.putImageData(restore_array[index],0,0);
  }
 
+ undoButton.addEventListener('click', undoLast)
 
 
    
