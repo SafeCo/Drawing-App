@@ -56,3 +56,8 @@ li{
     border: solid black 1px;
     cursor: pointer;
 }
+
+#undo{
+    border: solid black 2px;
+    cursor: pointer;
+}

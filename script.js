@@ -8,10 +8,14 @@ window.addEventListener("load",()=>{
     const widthExample = document.querySelector("#width-example")
     const toolColour = document.querySelector("#tool-colour")
     const tools = document.querySelector("#tools")
+    const undoButton = document.querySelector("#undo")
     let pen = true;
     let line = false
     let square = false
     let circle = false
+
+    let restore_array = [];
+    let index = -1;
 
 //CONSIDER REMOVING EVENTLISTENERS WHEN NOT SELECTED BY TOOLS AND THEN ADDING THEM BACK WHEN IN USE FOR PERFORMANCE'S SAKE???
 // EVERYTIME THE CANVAS RENDERS THE LINE IT SUBSEQUNTLY REFRESHES THE CANVAS REMOVING OTHER DRAWINGS, CONSIDER PUTTING DRAWINGS INTO AN OBJECT AND RENDERING THEM EVERYTIME THE CANVAS IS RENDERED.
@@ -106,7 +110,7 @@ window.addEventListener("load",()=>{
     toolColour.addEventListener("change", displayPenWidth)
 
     
-//                                                          LINE             !!!!!!!!!!!!!!
+//                                                         SHAPE              !!!!!!!!!!!!!!
 
 let isDrawLine = false;
 let lineStartPosition = {x : 0, y: 0};
@@ -192,7 +196,7 @@ const drawLine = (event) => {
     if(pen ==true) return;
     if (!line || !square) {
         lineEndPostion = getLinePosition(event);
-        clearCanvas();
+        clearCanvas(event);
         drawLine(event);
     }
     
@@ -202,17 +206,24 @@ const drawLine = (event) => {
     if(pen ==true) return;
     if (!line || !square || !circle) {
         isDrawLine = false;
+    
+            restore_array.push(ctx.getImageData(0,0, canvas.width, canvas.height ));
+            index += 1;
+            
+
     }
   }
 
-  const clearCanvas = () => {
+  const clearCanvas = (event) => {
     if(pen ==true) return;
     if (!line || !square || !circle) {
         ctx.lineWidth = penWidthRange.value;
         ctx.lineCap = "round";
         ctx.strokeStyle = toolColour.value;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+        for( i = 0; i < restore_array.length; i++){
+            ctx.putImageData(restore_array[i],0,0);
+        }
     }
 
  }
@@ -220,6 +231,12 @@ const drawLine = (event) => {
  canvas.addEventListener('mousemove', lineMouseMoveListener);
  canvas.addEventListener('mouseup', lineMouseupListener);
 
+
+ function undoLast (){
+     index -= 1;
+     restore_array.pop();
+     ctx.putImageData(restore_array[index],0,0);
+ }
 
 
 
