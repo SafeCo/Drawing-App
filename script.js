@@ -110,8 +110,6 @@ window.addEventListener("load",()=>{
 
         ctx.lineTo(e.clientX , e.clientY - interface.offsetHeight);
         ctx.stroke();
-        // ctx.beginPath()
-        // ctx.moveTo(e.clientX, e.clixentY - interface.offsetHeight)
     }
     canvas.addEventListener("mousedown", startPenPosition)
     canvas.addEventListener("mouseup", finishedPenPosition)
@@ -158,6 +156,7 @@ const drawShape = (event) => {
         ctx.lineCap = "round";
         ctx.strokeStyle = toolColour.value;
         if (line == true){
+            ctx.lineCap = "square";
             ctx.beginPath();
             ctx.moveTo(shapeStartPosition.x, shapeStartPosition.y);
             ctx.lineTo(shapeEndPosition.x, shapeEndPosition.y);
@@ -195,12 +194,21 @@ const drawShape = (event) => {
             
         }else if ( circle == true){
             ctx.beginPath();
-            ctx.arc(shapeStartPosition.x, shapeStartPosition.y, shapeStartPosition.y - shapeEndPosition.y, 0, 2 * Math.PI);
+            ctx.arc(shapeStartPosition.x, shapeStartPosition.y, circleRadius(), 0, 2 * Math.PI);
             ctx.stroke();
             ctx.beginPath();
+            console.log(shapeStartPosition.y)
         }
     }
     
+ }
+
+ function circleRadius(){
+     if (shapeStartPosition.y >= shapeEndPosition.y){
+         return shapeStartPosition.y - shapeEndPosition.y
+     } else if (shapeStartPosition.y < shapeEndPosition.y){
+         return shapeEndPosition.y -shapeStartPosition.y
+     } 
  }
 
  const shapeMouseDownListener = (event) => {
@@ -254,9 +262,17 @@ const drawShape = (event) => {
 
 
  function undoLast (){
-     index -= 1;
+     if (index > -1){
+        index -= 1;
+     }
      restore_array.pop();
-     ctx.putImageData(restore_array[index],0,0);
+    
+     if(index <= -1){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+     } else {
+        ctx.putImageData(restore_array[index],0,0);
+     }
+     
  }
 
  undoButton.addEventListener('click', undoLast)
