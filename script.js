@@ -8,6 +8,7 @@ window.addEventListener("load",()=>{
     const widthExample = document.querySelector("#width-example")
     const toolColour = document.querySelector("#tool-colour")
     const tools = document.querySelector("#tools")
+    const toolButton = document.querySelector(".button")
     const undoButton = document.querySelector("#undo")
     let pen = true;
     let line = false
@@ -41,33 +42,43 @@ window.addEventListener("load",()=>{
             line = false
             square = false
             circle = false
-            e.target.style.color = 'red'
+            removeActiveClass()
+            e.target.classList.add('active')
         } else if (selectedTool == "Line"){
             pen = false
             line = true
             square = false
             circle = false
-            e.target.style.color = 'blue'
+            removeActiveClass()
+            e.target.classList.add('active')
         } else if (selectedTool == "Square"){
             pen = false
             line = false
             square = true
             circle = false
-            console.log(square)
-            e.target.style.color = 'yellow'
+            removeActiveClass()
+            e.target.classList.add('active')
         } else if (selectedTool == "Circle"){
             pen = false
             line = false
             square = false
             circle = true
-            e.target.style.color = 'green'
+            removeActiveClass()
+            e.target.classList.add('active')
         }
     }
 
     for( let i = 0; i < tools.children.length; i++){
         tools.children[i].addEventListener("click", checkTool)
     }
+
+    function removeActiveClass () {
+        for( let i = 0; i < tools.children.length; i++){
+            tools.children[i].classList.remove('active')
+        }
+    }
     
+
     
 
 //                                                          PEN TOOL      !!!!!!!!!!!!!!
@@ -110,7 +121,7 @@ window.addEventListener("load",()=>{
 
 //                                                          PEN WIDTH       !!!!!!!!!!!!!!
     function displayPenWidth(){
-        penWidthDisplay.innerHTML = "Pen Width: " + penWidthRange.value
+        penWidthDisplay.innerHTML = "Line Width: " + penWidthRange.value
         gsap.to(widthExample, { width:penWidthRange.value, backgroundColor: toolColour.value})
     }
 
