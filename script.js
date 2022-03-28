@@ -72,6 +72,8 @@ window.addEventListener("load",()=>{
         tools.children[i].addEventListener("click", checkTool)
     }
 
+   
+
     function removeActiveClass () {
         for( let i = 0; i < tools.children.length; i++){
             tools.children[i].classList.remove('active')
@@ -117,7 +119,7 @@ window.addEventListener("load",()=>{
 
 
 
-//                                                          PEN WIDTH       !!!!!!!!!!!!!!
+//                                                           WIDTH       !!!!!!!!!!!!!!
     function displayPenWidth(){
         penWidthDisplay.innerHTML = "Line Width: " + penWidthRange.value
         gsap.to(widthExample, { width:penWidthRange.value, backgroundColor: toolColour.value})
@@ -127,7 +129,7 @@ window.addEventListener("load",()=>{
     toolColour.addEventListener("change", displayPenWidth)
 
     
-//                                                         SHAPE              !!!!!!!!!!!!!!
+//                                                         SHAPES              !!!!!!!!!!!!!!
 
 let isDrawShape = false;
 let shapeStartPosition = {x : 0, y: 0};
@@ -197,7 +199,6 @@ const drawShape = (event) => {
             ctx.arc(shapeStartPosition.x, shapeStartPosition.y, circleRadius(), 0, 2 * Math.PI);
             ctx.stroke();
             ctx.beginPath();
-            console.log(shapeStartPosition.y)
         }
     }
     

@@ -42,9 +42,18 @@ body{
     background-color: #0000ff;
 }
 
+#colour{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+
 
 #tool-colour{
     border-radius: 4px;
+    margin-top: 18px;
 }
 
 #tools-container{
@@ -85,8 +94,14 @@ ul{
 }
 
 .active{
-    background-color: rgb(29, 18, 53);
+    filter: contrast(3);
     transform: scale(0.9);
+}
+
+#settings{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 
